@@ -1,0 +1,34 @@
+spin_manifest_version = 2
+
+[application]
+name = "rbutleraka"
+version = "1.0.0"
+authors = ["rbutler"]
+description = "Akamai Value Confirmation & Executive PDF Generator Engine"
+
+[[trigger.http]]
+route = "/..."
+component = "generator-engine"
+
+[component.generator-engine]
+source = "app.wasm"
+# Allow outbound secure network connections to any Akamai API Gateways
+allowed_outbound_hosts = ["https://*.akamaiapis.net"]
+
+# Bind global deployment secrets to local component environment values
+[component.generator-engine.variables]
+akamai_host = "{{ akamai_host }}"
+akamai_client_token = "{{ akamai_client_token }}"
+akamai_client_secret = "{{ akamai_client_secret }}"
+akamai_access_token = "{{ akamai_access_token }}"
+
+[component.generator-engine.build]
+command = "spin py2wasm app.py -o app.wasm"
+watch = ["app.py", "requirements.txt"]
+
+# Define environment variables schema expected by the application runtime
+[variables]
+akamai_host = { required = true }
+akamai_client_token = { required = true }
+akamai_client_secret = { required = true, secret = true }
+akamai_access_token = { required = true, secret = true }

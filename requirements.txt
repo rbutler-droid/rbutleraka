@@ -1,0 +1,3 @@
+requests>=2.31.0
+akamai-edgegrid>=2.1.1
+reportlab>=4.1.0
